@@ -123,6 +123,20 @@ bool isTranslator(const EdgeConGraph graph, int node1, int node2)
     return graph->translators[node1 * orderG(graph->graph) + node2];
 }
 
+void copyTranslator(EdgeConGraph source, EdgeConGraph target) {
+    int graphOrder = orderG(getGraph(source));
+    for (int u = 0; u < graphOrder; u++)
+    {
+        for (int v = 0; v < graphOrder; v++)
+        {
+            if (isTranslator(source, u, v))
+            {
+                addTranslator(target, u, v);
+            }
+        }
+    }
+}
+
 void computesComponent(EdgeConGraph graph, int node, int component)
 {
     if (graph->homogeneousComponents[component][node])

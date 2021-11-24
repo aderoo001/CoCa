@@ -1,4 +1,4 @@
-# CoCa
+# CoCa - DM implémentation :
 
 Assignment for the Complexité and Calculabilité course of the M1 informatique from University of Bordeaux.
 Author: Vincent Penelle (vincent.penelle@u-bordeaux.fr)

@@ -39,14 +39,6 @@ EdgeConGraph initializeGraph(Graph graph);
 Graph getGraph(const EdgeConGraph graph);
 
 /**
- * @brief Resets the translator set to empty, and recomputes heterogeneous edges and connected components.
- * 
- * @param graph A EdgeConGraph.
- * @pre @p graph must be valid.
- */
-void resetTranslator(EdgeConGraph graph);
-
-/**
  * @brief Frees the additional informations of a EdgeConGraph, but NOT the graph (cf initialize).
  * 
  * @param graph A EdgeConGraph.
@@ -151,6 +143,21 @@ void removeTranslator(EdgeConGraph graph, int node1, int node2);
  * @return false otherwise
  */
 bool isTranslator(const EdgeConGraph graph, int node1, int node2);
+
+/**
+ * @brief Copy @p source translators to @p target translators.
+ * 
+ * @param source An EdgeConGraph
+ * @param target An EdgeConGraph
+ */
+void copyTranslator(EdgeConGraph source, EdgeConGraph target);
+
+/**
+ * @brief Sets all edges to be not translator;
+ * 
+ * @param graph An EdgeConGraph
+ */
+void resetTranslator(EdgeConGraph graph);
 
 /**
  * @brief Computes the homogeneous components.
