@@ -198,6 +198,7 @@ unsigned int getMinCost(EdgeConGraph graph, int source, int target) {
                         free(nTmp);
                         nTmp = NULL;
                         counter--;
+                        break;
                     } else {
                         push(s, source);
                         source = v;
