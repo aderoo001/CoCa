@@ -24,7 +24,6 @@ int getSize(Stack s) {
 }
 
 bool isEmpty(Stack s) {
-    printf("bool = %d\n", s->nb <= 0);
     return s->nb <= 0;
 }
 
@@ -41,10 +40,6 @@ int pop(Stack s) {
         i = s->stack[s->nb];
     }
     return i;
-}
-
-int getLast(Stack s) {
-    return s->stack[s->nb - 1];
 }
 
 void printStack(Stack s) {

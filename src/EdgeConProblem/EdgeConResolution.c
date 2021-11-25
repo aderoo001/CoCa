@@ -150,7 +150,7 @@ unsigned int getMinCost(EdgeConGraph graph, int source, int target) {
         a++;
         printf("%d\n", a);
         pop(s);
-        sleep(1);
+        //sleep(1);
         system("clear");
         printf("Source -> %d, k = %d\n", source, k);
         printStack(s);
@@ -236,7 +236,7 @@ int BruteForceEdgeCon(EdgeConGraph graph)
             {
                 int tmp = k;
                 printf("From %d to %d.\n", u, v);
-                sleep(3);
+                sleep(1);
                 tmp = (int) getMinCost(tmpGraph, u, v);
                 printf("cost = %d\n", tmp);
                 if (tmp > k) {
