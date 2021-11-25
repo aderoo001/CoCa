@@ -151,7 +151,7 @@ unsigned int getMinCost(EdgeConGraph graph, int source, int target) {
         a++;
         printf("%d\n", a);
         pop(s);
-        //sleep(1);
+        sleep(1);
         system("clear");
         printf("Source -> %d, k = %d\n", source, k);
         printStack(s);
