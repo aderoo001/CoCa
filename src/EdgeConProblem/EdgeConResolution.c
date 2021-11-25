@@ -191,7 +191,6 @@ unsigned int getMinCost(EdgeConGraph graph, int source, int target) {
                     if (counter > k) {
                         color[source] = 1;
                         source = pop(s);
-                        printf("source = %d\n", source);
                         int * nTmp = (int *) malloc(sizeof(int)*graphOrder);
                         getNeighborhood(getGraph(graph), source, nTmp);
                         setGreyNeighborhoodInWhith(neighborhood, nTmp, color);
@@ -212,6 +211,7 @@ unsigned int getMinCost(EdgeConGraph graph, int source, int target) {
         if (source != -1) {
             push(s, source);
         }
+        printStack(s);
     }
 
     freeStack(s);
