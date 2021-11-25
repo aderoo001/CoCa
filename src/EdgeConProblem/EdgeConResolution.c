@@ -90,7 +90,7 @@ void printColoredVertices(int* color, int size) {
     int x = TERM_SIZE;
     int n = size/TERM_SIZE;
 
-    for (int j = 0; j < n+1; j++)
+    for (int j = 0; j < n; j++)
     {
         for (int i = 0; i < x; i++) {
             if (((j*x)+i) >= size) break;
