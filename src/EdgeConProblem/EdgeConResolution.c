@@ -238,7 +238,7 @@ int BruteForceEdgeCon(EdgeConGraph graph)
             {
                 int tmp = k;
                 printf("From %d to %d.\n", u, v);
-                //sleep(1);
+                sleep(1);
                 tmp = (int) getMinCost(tmpGraph, u, v);
                 printf("cost = %d\n", tmp);
                 if (tmp > k) {
