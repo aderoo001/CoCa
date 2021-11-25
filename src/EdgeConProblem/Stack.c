@@ -34,7 +34,7 @@ void push(Stack s, int i) {
 }
 
 int pop(Stack s) {
-    int i = s->stack[0];
+    int i = -1;
     if (s->nb > 0)
     {
         s->nb--;

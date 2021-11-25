@@ -207,7 +207,7 @@ unsigned int getMinCost(EdgeConGraph graph, int source, int target) {
         }
 
         neighborhoodNumber = getNeighborhood(getGraph(graph), source, neighborhood);
-        if (!((root == source) && !gotWhiteNeighborhood(neighborhood, color))) {
+        if (source != -1) {
             push(s, source);
         }
     }
