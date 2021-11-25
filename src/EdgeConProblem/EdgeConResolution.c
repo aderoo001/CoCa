@@ -174,7 +174,7 @@ unsigned int getMinCost(EdgeConGraph graph, int source, int target) {
             setGreyNeighborhoodInWhith(neighborhood, nTmp, color);
             free(nTmp);
             nTmp = NULL;
-            if (!areInSameComponent(graph, source, tmp))
+            if (areInSameComponent(graph, source, tmp))
             {
                 counter --;
             }
