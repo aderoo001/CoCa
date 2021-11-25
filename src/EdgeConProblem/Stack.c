@@ -24,6 +24,7 @@ int getSize(Stack s) {
 }
 
 bool isEmpty(Stack s) {
+    printf("bool = %d\n", s->nb <= 0);
     return s->nb <= 0;
 }
 
@@ -33,14 +34,21 @@ void push(Stack s, int i) {
 }
 
 int pop(Stack s) {
-    int i = -1;
-    s->nb--;
-    i = s->stack[s->nb];
+    int i = s->stack[0];
+    if (s->nb > 0)
+    {
+        s->nb--;
+        i = s->stack[s->nb];
+    }
     return i;
 }
 
+int getLast(Stack s) {
+    return s->stack[s->nb - 1];
+}
+
 void printStack(Stack s) {
-    printf("***Print stack***\n");
+    printf("***Print stack -- size = %d***\n", s->nb);
     for (int i = 0; i < s->nb; i++)
     {
         printf("%d ", s->stack[i]);

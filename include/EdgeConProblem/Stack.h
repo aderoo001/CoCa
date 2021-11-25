@@ -16,4 +16,6 @@ void push(Stack s, int i);
 
 int pop(Stack s);
 
+int getLast(Stack s);
+
 void printStack(Stack s);
