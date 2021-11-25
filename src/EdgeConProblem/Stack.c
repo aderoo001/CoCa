@@ -19,10 +19,6 @@ void freeStack(Stack s) {
     s = NULL;
 }
 
-int getSize(Stack s) {
-    return (int) s->nb;
-}
-
 bool isEmpty(Stack s) {
     return s->nb <= 0;
 }

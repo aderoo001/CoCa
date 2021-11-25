@@ -94,13 +94,8 @@ void printColoredVertices(int* color, int size) {
     {
         for (int i = 0; i < x; i++) {
             if (((j*x)+i) >= size) break;
-            
-            if (((j*x)+i)/10 == 0)
-            {
-                printf("   %d   ", (j*x)+i);
-            } else {
-                printf("  %d   ", (j*x)+i);
-            }
+            if (((j*x)+i)/10 == 0) printf("   %d   ", (j*x)+i);
+            else printf("  %d   ", (j*x)+i);
         }
         printf("\n");
         for (int i = 0; i < x; i++)
@@ -148,8 +143,6 @@ unsigned int getMinCost(EdgeConGraph graph, int source, int target) {
 
     while (!isEmpty(s))
     {
-        a++;
-        printf("%d\n", a);
         pop(s);
         sleep(1);
         system("clear");

@@ -4,8 +4,6 @@
 
 typedef struct stack *Stack;
 
-int getSize(Stack s);
-
 bool isEmpty(Stack s);
 
 Stack createStack(int size);
