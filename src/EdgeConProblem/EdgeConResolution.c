@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#define TERM_SIZE 25;
+#define TERM_SIZE 10;
 #define KRED  "\x1B[31m"
 #define KYEL  "\x1B[33m"
 #define KWHT  "\x1B[37m"
@@ -63,7 +63,8 @@ void setGreyNeighborhoodInWhith(int * oldNeighborhood, int * newNeighborhood, in
     int i = 0;
     while (oldNeighborhood[i] != -1)
     {
-        int v = oldNeighborhood[i++];
+        int v = oldNeighborhood[i];
+        i++;
         if ((color[v] == 1 && !isInNeighborhood(newNeighborhood, v)))
         {
             color[v] = 0;
@@ -164,7 +165,7 @@ unsigned int getMinCost(EdgeConGraph graph, int source, int target) {
         } 
 
         if (!gotWhiteNeighborhood(neighborhood, color) 
-            || (source == target ))
+            || (source == target))
         {
             color[source] = 1;
             int tmp = pop(s);
