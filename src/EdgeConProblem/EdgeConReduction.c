@@ -89,7 +89,7 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
     }
     Z3_ast phi_1 = Z3_mk_and(ctx, size_Node, tab_phi_1);
 
-    
+
 
     return Z3_mk_false(ctx);
 }
