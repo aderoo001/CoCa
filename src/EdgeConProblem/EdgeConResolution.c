@@ -155,59 +155,34 @@ void getMinCost(EdgeConGraph graph, int source, int target, int cost) {
     getNeighborhood(getGraph(graph), source, neighborhood);
     //< The vertice's color - 0->white 1->grey 2->black
     int * color = (int*) malloc(sizeof(int)*graphOrder);
+    int * d = (int*) malloc(sizeof(int)*graphOrder);
     for (int i = 0; i < graphOrder ; i++) color[i] = 0;
+    for (int i = 0; i < graphOrder ; i++) d[i] = graphOrder;
     push(s, source);
-    color[source] = 2;
+    color[source] = 1;
+    d[source] = 0;
 
     while (source != target)
     {
-        pop(s);
-        //sleep(1);
-        system("clear");
-        printf("Source -> %d, target -> %d, compteur = %d\n", source, target, counter);
-        printStack(s);
-        isEmpty(s);
-        printNeighborhood(neighborhood);
-        printColoredVertices(color, graphOrder);
-
-        if (source == target) break;
-
-        if (!gotWhiteNeighborhood(neighborhood, color) 
-            || (source == target) 
-            || (counter > cost))
-        {
-            color[source] = 1;
-            int tmp = pop(s);
-            setGreyNeighborhoodInWhite(getGraph(graph),source, tmp, color);
-            if (isEdgeHeterogeneous(graph, source, tmp)) {
-                counter--;
-                removeTranslator(graph, tmp, source);
-            }
-            source = tmp;
-        } 
-        else
-        { 
-            int nSize = getNeighborhoodSize(neighborhood);
-            for (int i = 0; i < nSize; i++)
-            {     
-                int v = getNeighborhoodMember(neighborhood, i);
-                if (color[v] == 0)
-                {
-                   if (isEdgeHeterogeneous(graph, source, v)) {
-                        counter++;
-                        addTranslator(graph, source, v);
-                    } 
-                    push(s, source);
-                    source = v;
-                    color[source] = 2;
-                    break;
-                }
-            }
-        }
-
+        source = pop(s);
+        color[source] = 2;
         getNeighborhood(getGraph(graph), source, neighborhood);
-        if (source != -1) {
-            push(s, source);
+        //sleep(1);
+        //system("clear");
+        //printf("Source -> %d, target -> %d, compteur = %d\n", source, target, counter);
+        //printStack(s);
+        //isEmpty(s);
+        //printNeighborhood(neighborhood);
+        //printColoredVertices(color, graphOrder);
+
+        int nSize = getNeighborhoodSize(neighborhood, source);
+        for (int i = 0; i < nSize ; ++i) {
+            int v = neighborhood[i];
+            if (color[v] != 1 || color[v] !=2) {
+                color[v] = 1;
+                d[v] = d[source]++;
+                push(s, v);
+            }
         }
     }
 
