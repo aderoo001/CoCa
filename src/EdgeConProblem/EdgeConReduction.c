@@ -69,7 +69,7 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
                     Z3_ast negx_1 = Z3_mk_not(ctx, x[e][i]);
                     Z3_ast negx_2 = Z3_mk_not(ctx, x[e][j]);
                     Z3_ast tab_or[2] = {negx_1, negx_2};
-                    tab_and[i*j] = Z3_mk_or(ctx, 2, tab_or);
+                    tab_and[(i*N)+j] = Z3_mk_or(ctx, 2, tab_or);
 
                 }
             }
@@ -90,8 +90,77 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
     }
     Z3_ast phi_1 = Z3_mk_and(ctx, size_Node, tab_phi_1);
 
+    Z3_ast tab_phi2[N-1];
+    for (int i = 1; i < N; i++) {
 
+        Z3_ast tab_and[(N-1)*(N-1)];
 
+        for (int j = 1; j < N; j++) {
+            for (int k = 1; k < N; k++) {
+
+                if ((i != j) && (i != k) && (j != k)) {
+                    Z3_ast negp_1 = Z3_mk_not(ctx, p[i][j]);
+                    Z3_ast negp_2 = Z3_mk_not(ctx, p[i][k]);
+                    Z3_ast tab_or[2] = {negp_1, negp_2};
+                    tab_and[((j-1)*N)+(k-1)] = Z3_mk_or(ctx, 2, tab_or);
+                }
+            }
+        }
+
+        Z3_ast tab_or[N-1];
+
+        for (int j = 1; j < N; i++)
+            if (i != j) tab_or[i-1] = p[i][j];
+
+        Z3_ast and = Z3_mk_and(ctx, N*N, tab_and);
+        Z3_ast or = Z3_mk_or(ctx, N, tab_or);
+        Z3_ast tab_and_2[2] = {and, or};
+
+        tab_phi_2[i-1] = Z3_mk_and(ctx, 2, tab_and_2);
+    }
+    Z3_ast phi_2 = Z3_mk_and(ctx, N, tab_phi_2);
+
+    Z3_ast tab_phi3[N];
+    for (int j = 0; j < N; j++) {
+
+        Z3_ast tab_and[N*N];
+
+        for (int h = 0; h < N; h++) {
+            for (int k = 0; k < N; k++) {
+
+                if (h != k) {
+                    Z3_ast negl_1 = Z3_mk_not(ctx, l[j][h]);
+                    Z3_ast negp_2 = Z3_mk_not(ctx, l[j][k]);
+                    Z3_ast tab_or[2] = {negl_1, negl_2};
+                    tab_and[(h*N)+k] = Z3_mk_or(ctx, 2, tab_or);
+                }
+            }
+        }
+
+        Z3_ast tab_or[N];
+
+        for (int h = 0; h < N; h++)
+            tab_or[i] = l[j][h];
+
+        Z3_ast and = Z3_mk_and(ctx, N*N, tab_and);
+        Z3_ast or = Z3_mk_or(ctx, N, tab_or);
+        Z3_ast tab_and_2[2] = {and, or};
+
+        tab_phi_3[j] = Z3_mk_and(ctx, 2, tab_and_2);
+    }
+    Z3_ast phi_3 = Z3_mk_and(ctx, N, tab_phi_3);
+
+    Z3_ast tab_phi_4[N];
+    for (int j = 0; j < N; ++j) {
+        Z3_ast tab_or[N-cost];
+        for (int h = cost; h < N; ++h) {
+            tab_or[h-cost] = l[j][h];
+        }
+
+        tab_phi_4[j] = Z3_mk_or(ctx, N-cost, tab_or);
+    }
+    Z3_ast phi_4 = Z3_mk_or(ctx, N, tab_phi_4);
+    
     return Z3_mk_false(ctx);
 }
 
