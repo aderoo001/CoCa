@@ -144,7 +144,7 @@ int dijkstra (EdgeConGraph graph, int source, int target) {
 /**
  * @brief uncorrect algorithm
  */
-int getMinCost(EdgeConGraph graph, int source, int target, int cost) {
+int getMinCost(EdgeConGraph graph, int source, int target) {
     unsigned int counter = 0;
     int graphOrder = orderG(getGraph(graph));
 
@@ -208,6 +208,7 @@ int BruteForceEdgeCon(EdgeConGraph graph)
             {
                 int tmp = k;
                 tmp = (int) dijkstra(tmpGraph, u, v);
+                int lul = getMinCost(graph, u, v);
                 if (tmp > k) {
                     k = tmp;
                     copyTranslator(tmpGraph, graph);
