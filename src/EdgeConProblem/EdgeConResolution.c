@@ -214,7 +214,7 @@ void getMinCost(EdgeConGraph graph, int source, int target, int cost) {
     freeStack(s);
     free(color);
     color = NULL;
-    //deleteNeighborhood(neighborhood);
+    deleteNeighborhood(neighborhood);
 }
 
 int BruteForceEdgeCon(EdgeConGraph graph)
@@ -239,6 +239,8 @@ int BruteForceEdgeCon(EdgeConGraph graph)
             }
         }
     }
+
+    printTranslator(graph);
 
     return k;
 }
