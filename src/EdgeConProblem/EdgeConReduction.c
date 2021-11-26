@@ -34,8 +34,9 @@ Z3_ast getVariableLevelInSpanningTree(Z3_context ctx, int level, int component)
 
 Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
 {
-
-    int size_Node = orderG(getGraph(edgeGraph));
+    Graph graph = getGraph(edgeGraph);
+    int size_edge = sizeG(graph);
+    int size_node = orderG(graph);
     int N = getNumHeteregeneousEdges(edgeGraph);
 
     //Z3_ast x = mk_bool_var(ctx, "x");
@@ -45,9 +46,9 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
     //Z3_ast l = mk_bool_var(ctx, "l");
 
 
-    Z3_ast x[size_Node][N];
-    Z3_ast p[size_Node][N];
-    Z3_ast l[size_Node][N];
+    Z3_ast x[size_edge][N];
+    Z3_ast p[size_edge][N];
+    Z3_ast l[size_edge][N];
 
 
     //Z3_ast negx = Z3_mk_not(ctx, x);
@@ -57,8 +58,8 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
     //Z3_ast negl = Z3_mk_not(ctx, l);
 
 
-    Z3_ast tab_phi_1[size_Node];
-    for(int e = 0; e<size_Node; e++){
+    Z3_ast tab_phi_1[size_edge];
+    for(int e = 0; e<size_edge; e++){
 
         Z3_ast tab_and[N*N];
 
@@ -88,7 +89,7 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
 
         tab_phi_1[e] = Z3_mk_and(ctx, 2, tab_and_2);
     }
-    Z3_ast phi_1 = Z3_mk_and(ctx, size_Node, tab_phi_1);
+    Z3_ast phi_1 = Z3_mk_and(ctx, size_edge, tab_phi_1);
 
     Z3_ast tab_phi_2[N-1];
     for (int i = 1; i < N; i++) {
@@ -151,7 +152,7 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
     Z3_ast phi_3 = Z3_mk_and(ctx, N, tab_phi_3);
 
     Z3_ast tab_phi_4[N];
-    for (int j = 0; j < N; ++j) {
+    for (int j = 0; j < N; j++) {
         Z3_ast tab_or[N-cost];
         for (int h = cost; h < N; ++h) {
             tab_or[h-cost] = l[j][h];
@@ -161,7 +162,55 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
     }
     Z3_ast phi_4 = Z3_mk_or(ctx, N, tab_phi_4);
 
-    return Z3_mk_false(ctx);
+    Z3_ast tab_phi_7[N-1];
+    for (int j = 1; j < N; j++) {
+        Z3_ast tab_or[N-1];
+        for (int k = 1; k < N; k++) {
+            Z3_ast tab_and[2];
+            tab_and[0] = p[j][k];
+
+            Z3_ast tab_or_2[N]
+            int cmpt = 0;
+            for (int u = 0; u < size_node; u++) {
+                for (int v = 0; v < size_node; v++) {
+                    if (isEdge(graph, u, v)
+                        && !areInSameComponent(edgeGraph, u, v)) {
+
+                        Z3_ast tab_or_3[N - 1];
+                        for (int i = 1; i < N; ++i) {
+                            tab_or_3[i - 1] = x[cmpt][i]
+                        }
+                        Z3_ast or_3 = Z3_mk_or(ctx, N-1, tab_or_3);
+
+                        tab_or_2[cmpt] = or_3;
+                        cmpt++;
+                    }
+                }
+            }
+
+            Z3_ast or_2 = Z3_mk_or(ctx, N, tab_or_2);
+
+            Z3_ast tab_or_3[N-1];
+            for (int h = 1; h < N; h++) {
+                Z3_ast tab_and_2[2] = {l[j][h], l[k][h-1]}
+                tab_or_3[h-1] = Z3_mk_and(ctx, 2, tab_and_2);
+            }
+            Z3_ast or_3 = Z3_mk_or(ctx, N-1, tab_or_3);
+
+            Z3_ast tab_and_2[2] = {or_2, or_3};
+            Z3_ast and_2 = Z3_mk_and(ctx, 2, tab_and_2);
+
+            tab_and[1] = and_2;
+            tab_or[k-1] = Z3_mk_and(cts, 2, tab_and);
+        }
+        tab_phi_7[j-1] = Z3_mk_or(cts, N-1, tab_or);
+    }
+    Z3_ast phi_7 = Z3_mk_and(ctx, N-1, tab_phi_7);
+
+    Z3_ast tab_phi[5] = {phi_1, phi_2, phi_3, phi_4, phi_7};
+    Z3_ast phi = Z3_mk_and(ctx, 5, tab_phi);
+
+    return phi;
 }
 
 void getTranslatorSetFromModel(Z3_context ctx, Z3_model model, EdgeConGraph graph)
