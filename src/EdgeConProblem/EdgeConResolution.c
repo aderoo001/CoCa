@@ -144,7 +144,7 @@ int dijkstra (EdgeConGraph graph, int source, int target) {
 /**
  * @brief uncorrect algorithm
  */
-void getMinCost(EdgeConGraph graph, int source, int target, int cost) {
+int getMinCost(EdgeConGraph graph, int source, int target, int cost) {
     unsigned int counter = 0;
     int graphOrder = orderG(getGraph(graph));
 
@@ -175,15 +175,17 @@ void getMinCost(EdgeConGraph graph, int source, int target, int cost) {
         //printNeighborhood(neighborhood);
         //printColoredVertices(color, graphOrder);
 
-        int nSize = getNeighborhoodSize(neighborhood, source);
+        int nSize = getNeighborhoodSize(neighborhood);
         for (int i = 0; i < nSize ; ++i) {
-            int v = neighborhood[i];
+            int v = getNeighborhoodMember(neighborhood, i);
             if (color[v] != 1 || color[v] !=2) {
                 color[v] = 1;
                 d[v] = d[source]++;
                 push(s, v);
             }
         }
+
+        return d[target];
     }
 
     freeStack(s);
