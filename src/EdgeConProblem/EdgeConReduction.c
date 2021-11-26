@@ -46,9 +46,10 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
 
 
     Z3_ast x[size_Node][N];
+    Z3_ast x[size_Node][N];
 
 
-    Z3_ast negx = Z3_mk_not(ctx, x);
+    //Z3_ast negx = Z3_mk_not(ctx, x);
 
     Z3_ast negp = Z3_mk_not(ctx, p);
 
@@ -56,9 +57,6 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
 
 
     Z3_ast tab_phi_1[size_Node];
-
-    
-
     for(int e = 0; e<size_Node; e++){
 
         Z3_ast tab_and[N*N];
@@ -89,8 +87,9 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
 
         tab_phi_1[e] = Z3_mk_and(ctx, 2, tab_and_2);
     }
-
     Z3_ast phi_1 = Z3_mk_and(ctx, size_Node, tab_phi_1);
+
+    
 
     return Z3_mk_false(ctx);
 }
