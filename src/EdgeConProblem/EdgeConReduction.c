@@ -40,9 +40,9 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
 
     //Z3_ast x = mk_bool_var(ctx, "x");
 
-    Z3_ast p = mk_bool_var(ctx, "p");
+    //Z3_ast p = mk_bool_var(ctx, "p");
 
-    Z3_ast l = mk_bool_var(ctx, "l");
+    //Z3_ast l = mk_bool_var(ctx, "l");
 
 
     Z3_ast x[size_Node][N];
@@ -52,9 +52,9 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
 
     //Z3_ast negx = Z3_mk_not(ctx, x);
 
-    Z3_ast negp = Z3_mk_not(ctx, p);
+    //Z3_ast negp = Z3_mk_not(ctx, p);
 
-    Z3_ast negl = Z3_mk_not(ctx, l);
+    //Z3_ast negl = Z3_mk_not(ctx, l);
 
 
     Z3_ast tab_phi_1[size_Node];
