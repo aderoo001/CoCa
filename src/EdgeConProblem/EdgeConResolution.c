@@ -207,8 +207,8 @@ int BruteForceEdgeCon(EdgeConGraph graph)
             {
                 int tmp = k;
                 tmp = (int) dijkstra(tmpGraph, u, v);
-                int lul = getMinCost(graph, u, v);
-                printf("%d ", lul);
+                // int lul = getMinCost(graph, u, v);
+                // printf("%d ", lul);
                 if (tmp > k) {
                     k = tmp;
                     copyTranslator(tmpGraph, graph);
