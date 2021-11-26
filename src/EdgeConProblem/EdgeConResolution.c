@@ -144,7 +144,7 @@ int dijkstra (EdgeConGraph graph, int source, int target) {
 /**
  * @brief uncorrect algorithm
  */
-int getMinCost(EdgeConGraph graph, int source, int target) {
+int BFS(EdgeConGraph graph, int source, int target) {
     unsigned int counter = 0;
     int graphOrder = orderG(getGraph(graph));
 
@@ -167,12 +167,6 @@ int getMinCost(EdgeConGraph graph, int source, int target) {
         source = pop(s);
         color[source] = 2;
         getNeighborhood(getGraph(graph), source, neighborhood);
-        //sleep(1);
-        //system("clear");
-        //printf("Source -> %d, target -> %d, compteur = %d\n", source, target, counter);
-        //printStack(s);
-        //printNeighborhood(neighborhood);
-        //printColoredVertices(color, graphOrder);
 
         int nSize = getNeighborhoodSize(neighborhood);
         for (int i = 0; i < nSize ; ++i) {
@@ -206,8 +200,7 @@ int BruteForceEdgeCon(EdgeConGraph graph)
             {
                 int tmp = k;
                 tmp = (int) dijkstra(tmpGraph, u, v);
-                int lul = getMinCost(graph, u, v);
-                printf("%d ", lul);
+                //BFS(graph, u, v);
                 if (tmp > k) {
                     k = tmp;
                     copyTranslator(tmpGraph, graph);
