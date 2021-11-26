@@ -46,7 +46,8 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
 
 
     Z3_ast x[size_Node][N];
-    Z3_ast x[size_Node][N];
+    Z3_ast p[size_Node][N];
+    Z3_ast l[size_Node][N];
 
 
     //Z3_ast negx = Z3_mk_not(ctx, x);
