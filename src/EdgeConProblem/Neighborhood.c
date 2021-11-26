@@ -40,7 +40,7 @@ void getNeighborhood(Graph graph, int source, Neighborhood n) {
 
     while (v < n->maxSize)
     {
-        if (isEdge(graph, source, v))
+        if (isEdge(graph, source, v) && (v < orderG(graph)))
         {
             n->neighborhood[n->size] = v;
             n->size++;
@@ -107,14 +107,18 @@ void setGreyNeighborhoodInWhite(Graph graph, int target, int source, int * color
     while (v != -1)
     {
         getNeighborhood(graph, v, nTmp);
-        if ((color[v] == 1 && !gotBlackNeighborhood(nTmp, color)))
+        if ((color[v] == 1 
+            && !gotBlackNeighborhood(nTmp, color)
+            && (v != source))) 
+        {
             color[v] = 0;
+        }
         i++;
         v = n->neighborhood[i];
     }
 
-deleteNeighborhood(n);
-deleteNeighborhood(nTmp);
+    deleteNeighborhood(n);
+    deleteNeighborhood(nTmp);
 }
 
 void printNeighborhood(Neighborhood n) {

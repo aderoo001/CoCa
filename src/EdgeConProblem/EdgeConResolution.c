@@ -6,11 +6,56 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#define TERM_SIZE 15;
+#define TERM_SIZE 25;
 #define KRED  "\x1B[31m"
 #define KYEL  "\x1B[33m"
 #define KWHT  "\x1B[37m"
 
+int getMinAndWhite(int * list, int * color, int size) {
+    int min = -1;
+    int tst = size;
+    for (int i = 0; i < size; i++)
+    {
+        if ((color[i] != 2) && list[i] < tst)
+        {
+            tst = list[i];
+            min = i;
+        }
+    }
+    return min;
+}
+
+/**
+ * @brief for debbug.
+ */
+void printWeight(int * weight, int size) {
+    printf("***Print weight vertices***\n");
+    int x = TERM_SIZE;
+    int n = size/TERM_SIZE;
+
+    for (int j = 0; j <= n; j++)
+    {
+        for (int i = 0; i < x; i++) {
+            if (((j*x)+i) >= size) break;
+            if (((j*x)+i)/10 == 0) printf("   %d   ", (j*x)+i);
+            else printf("  %d   ", (j*x)+i);
+        }
+        printf("\n");
+        for (int i = 0; i < x; i++)
+        {
+            int a = weight[(j*x)+i];
+            if (((j*x)+i) >= size) break;
+            if (a/10 == 0) printf("   %d   ", a);
+            else printf("  %d   ", a);
+        }
+        printf(KWHT "\n");
+    }
+    printf("***end***\n");
+}
+
+/**
+ * @brief for debbug.
+ */
 void printColoredVertices(int* color, int size) {
     printf("***Print colored vertices***\n");
     int x = TERM_SIZE;
@@ -47,8 +92,60 @@ void printColoredVertices(int* color, int size) {
     printf("***end***\n");
 }
 
-unsigned int getMinCost(EdgeConGraph graph, int source, int target) {
-    unsigned int counter = 0, k = getNumComponents(graph);
+int dijkstra (EdgeConGraph graph, int source, int target) {
+    unsigned int k = 0;
+    int graphOrder = orderG(getGraph(graph)), root = source;
+
+    //< vertice's neighborhood.
+    Neighborhood neighborhood = createNeighborhood(graphOrder + 1);
+    getNeighborhood(getGraph(graph), source, neighborhood);
+    //< The vertice's color - 0->white 1->grey 2->black
+    int * color = (int*) malloc(sizeof(int)*graphOrder+1);
+    int * weight = (int*) malloc(sizeof(int)*graphOrder+1);
+    for (int i = 0; i < graphOrder ; i++) color[i] = 0;
+    for (int i = 0; i < graphOrder ; i++) weight[i] = getNumHeteregeneousEdges(graph);
+
+    color[source] = 1;
+    weight[source] = 0;
+
+    while (source != target)
+    {
+        int nSize = getNeighborhoodSize(neighborhood);
+        for (int i = 0; i < nSize; i++)
+        {
+            k = weight[source];
+            int v = getNeighborhoodMember(neighborhood, i);
+            if (color[v] != 2)
+            {
+                if (isEdgeHeterogeneous(graph, source, v)) k++;
+                if (weight[v] >= k) weight[v] = k;
+            }
+            
+        }
+        color[source] = 2;
+        int tmp = getMinAndWhite(weight, color, graphOrder);
+        addTranslator(graph, source, tmp);
+        source = tmp;
+        color[source] = 1;
+        getNeighborhood(getGraph(graph), source, neighborhood);
+    }
+
+    k = weight[target];
+
+    free(weight);
+    weight = NULL;
+    free(color);
+    color = NULL;
+    deleteNeighborhood(neighborhood);
+
+    return k;
+}
+
+/**
+ * @brief uncorrect algorithm
+ */
+void getMinCost(EdgeConGraph graph, int source, int target, int cost) {
+    unsigned int counter = 0;
     int graphOrder = orderG(getGraph(graph));
 
     Stack s = createStack(graphOrder);
@@ -62,30 +159,28 @@ unsigned int getMinCost(EdgeConGraph graph, int source, int target) {
     push(s, source);
     color[source] = 2;
 
-    while (!isEmpty(s))
+    while (source != target)
     {
         pop(s);
         //sleep(1);
         system("clear");
-        printf("Source -> %d, target -> %d, k = %d, compteur = %d\n", source, target, k, counter);
+        printf("Source -> %d, target -> %d, compteur = %d\n", source, target, counter);
         printStack(s);
         isEmpty(s);
         printNeighborhood(neighborhood);
         printColoredVertices(color, graphOrder);
 
-        if (((source == target) && (counter < k))) {
-            k = counter;
-            if (k == 1) break;
-        } 
+        if (source == target) break;
 
         if (!gotWhiteNeighborhood(neighborhood, color) 
-            || (source == target))
+            || (source == target) 
+            || (counter > cost))
         {
             color[source] = 1;
             int tmp = pop(s);
-            setGreyNeighborhoodInWhite(getGraph(graph),tmp, source, color);
+            setGreyNeighborhoodInWhite(getGraph(graph),source, tmp, color);
             if (isEdgeHeterogeneous(graph, source, tmp)) {
-                counter --;
+                counter--;
                 removeTranslator(graph, tmp, source);
             }
             source = tmp;
@@ -98,26 +193,14 @@ unsigned int getMinCost(EdgeConGraph graph, int source, int target) {
                 int v = getNeighborhoodMember(neighborhood, i);
                 if (color[v] == 0)
                 {
-                    if (counter > k) {
-                        color[source] = 1;
-                        int tmp = pop(s);
-                        setGreyNeighborhoodInWhite(getGraph(graph),tmp, source, color);
-                        if (isEdgeHeterogeneous(graph, source, tmp)) {
-                            counter --;
-                            removeTranslator(graph, tmp, source);
-                        }
-                        source = tmp;
-                        break;
-                    } else {
-                        if (isEdgeHeterogeneous(graph, source, v)) {
-                            counter ++;
-                            addTranslator(graph, source, v);
-                        } 
-                        push(s, source);
-                        source = v;
-                        color[source] = 2;
-                        break;
-                    }
+                   if (isEdgeHeterogeneous(graph, source, v)) {
+                        counter++;
+                        addTranslator(graph, source, v);
+                    } 
+                    push(s, source);
+                    source = v;
+                    color[source] = 2;
+                    break;
                 }
             }
         }
@@ -131,16 +214,13 @@ unsigned int getMinCost(EdgeConGraph graph, int source, int target) {
     freeStack(s);
     free(color);
     color = NULL;
-    deleteNeighborhood(neighborhood);
-
-    return k;
+    //deleteNeighborhood(neighborhood);
 }
 
 int BruteForceEdgeCon(EdgeConGraph graph)
 {
     int k = 0;
     int graphOrder = orderG(getGraph(graph));
-    printf("Taille du graph : %d\n", graphOrder);
     EdgeConGraph tmpGraph = initializeGraph(getGraph(graph));
 
     for (int u = 0; u < graphOrder; u++)
@@ -150,7 +230,7 @@ int BruteForceEdgeCon(EdgeConGraph graph)
             if (u != v)
             {
                 int tmp = k;
-                tmp = (int) getMinCost(tmpGraph, u, v);
+                tmp = (int) dijkstra(tmpGraph, u, v);
                 if (tmp > k) {
                     k = tmp;
                     copyTranslator(tmpGraph, graph);
@@ -159,7 +239,6 @@ int BruteForceEdgeCon(EdgeConGraph graph)
             }
         }
     }
-    printf("\nResultat : %d.\n\n", k);
 
     return k;
 }
