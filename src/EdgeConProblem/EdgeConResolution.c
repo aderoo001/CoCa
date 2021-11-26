@@ -200,8 +200,8 @@ int BruteForceEdgeCon(EdgeConGraph graph)
             if (u != v)
             {
                 int tmp = k;
-                //tmp = (int) dijkstra(tmpGraph, u, v);
-                tmp = (int) BFS(tmpGraph, u, v);
+                tmp = (int) dijkstra(tmpGraph, u, v);
+                //tmp = (int) BFS(tmpGraph, u, v);
                 if (tmp > k) {
                     k = tmp;
                     copyTranslator(tmpGraph, graph);
