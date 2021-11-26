@@ -184,14 +184,13 @@ int getMinCost(EdgeConGraph graph, int source, int target) {
                 push(s, v);
             }
         }
-
-        return d[target];
     }
 
     freeStack(s);
     free(color);
     color = NULL;
     deleteNeighborhood(neighborhood);
+    return d[target];
 }
 
 int BruteForceEdgeCon(EdgeConGraph graph)
