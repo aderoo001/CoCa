@@ -90,7 +90,7 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
     }
     Z3_ast phi_1 = Z3_mk_and(ctx, size_Node, tab_phi_1);
 
-    Z3_ast tab_phi2[N-1];
+    Z3_ast tab_phi_2[N-1];
     for (int i = 1; i < N; i++) {
 
         Z3_ast tab_and[(N-1)*(N-1)];
@@ -120,7 +120,7 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
     }
     Z3_ast phi_2 = Z3_mk_and(ctx, N, tab_phi_2);
 
-    Z3_ast tab_phi3[N];
+    Z3_ast tab_phi_3[N];
     for (int j = 0; j < N; j++) {
 
         Z3_ast tab_and[N*N];
@@ -130,7 +130,7 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
 
                 if (h != k) {
                     Z3_ast negl_1 = Z3_mk_not(ctx, l[j][h]);
-                    Z3_ast negp_2 = Z3_mk_not(ctx, l[j][k]);
+                    Z3_ast negl_2 = Z3_mk_not(ctx, l[j][k]);
                     Z3_ast tab_or[2] = {negl_1, negl_2};
                     tab_and[(h*N)+k] = Z3_mk_or(ctx, 2, tab_or);
                 }
@@ -140,7 +140,7 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
         Z3_ast tab_or[N];
 
         for (int h = 0; h < N; h++)
-            tab_or[i] = l[j][h];
+            tab_or[h] = l[j][h];
 
         Z3_ast and = Z3_mk_and(ctx, N*N, tab_and);
         Z3_ast or = Z3_mk_or(ctx, N, tab_or);
@@ -160,7 +160,7 @@ Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
         tab_phi_4[j] = Z3_mk_or(ctx, N-cost, tab_or);
     }
     Z3_ast phi_4 = Z3_mk_or(ctx, N, tab_phi_4);
-    
+
     return Z3_mk_false(ctx);
 }
 
