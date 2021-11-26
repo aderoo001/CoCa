@@ -167,13 +167,13 @@ int getMinCost(EdgeConGraph graph, int source, int target) {
         source = pop(s);
         color[source] = 2;
         getNeighborhood(getGraph(graph), source, neighborhood);
-        //sleep(1);
-        //system("clear");
-        //printf("Source -> %d, target -> %d, compteur = %d\n", source, target, counter);
-        //printStack(s);
-        //isEmpty(s);
-        //printNeighborhood(neighborhood);
-        //printColoredVertices(color, graphOrder);
+        sleep(1);
+        system("clear");
+        printf("Source -> %d, target -> %d, compteur = %d\n", source, target, counter);
+        printStack(s);
+        isEmpty(s);
+        printNeighborhood(neighborhood);
+        printColoredVertices(color, graphOrder);
 
         int nSize = getNeighborhoodSize(neighborhood);
         for (int i = 0; i < nSize ; ++i) {
