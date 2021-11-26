@@ -34,6 +34,64 @@ Z3_ast getVariableLevelInSpanningTree(Z3_context ctx, int level, int component)
 
 Z3_ast EdgeConReduction(Z3_context ctx, EdgeConGraph edgeGraph, int cost)
 {
+
+    int size_Node = orderG(getGraph(edgeGraph));
+    int N = getNumHeteregeneousEdges(edgeGraph);
+
+    //Z3_ast x = mk_bool_var(ctx, "x");
+
+    Z3_ast p = mk_bool_var(ctx, "p");
+
+    Z3_ast l = mk_bool_var(ctx, "l");
+
+
+    Z3_ast x[size_Node][N];
+
+
+    Z3_ast negx = Z3_mk_not(ctx, x);
+
+    Z3_ast negp = Z3_mk_not(ctx, p);
+
+    Z3_ast negl = Z3_mk_not(ctx, l);
+
+
+    Z3_ast tab_phi_1[size_Node];
+
+    
+
+    for(int e = 0; e<size_Node; e++){
+
+        Z3_ast tab_and[N*N];
+
+        for(int i = 0; i < N; i++){
+            for (int j = 0; j < N; j++)
+            {
+                if(i!=j){
+                    Z3_ast negx_1 = Z3_mk_not(ctx, x[e][i]);
+                    Z3_ast negx_2 = Z3_mk_not(ctx, x[e][j]);
+                    Z3_ast tab_or[2] = {negx_1, negx_2};
+                    tab_and[i*j] = Z3_mk_or(ctx, 2, tab_or);
+
+                }
+            }
+        }        
+
+        Z3_ast tab_or[N];
+
+        for (int i = 0; i < N; i++)
+        {
+            tab_or[i] = x[e][i];
+        }
+
+        Z3_ast and = Z3_mk_and(ctx, N*N, tab_and);
+        Z3_ast or = Z3_mk_or(ctx, N, tab_or);
+        Z3_ast tab_and_2[2] = {and, or};
+
+        tab_phi_1[e] = Z3_mk_and(ctx, 2, tab_and_2);
+    }
+
+    Z3_ast phi_1 = Z3_mk_and(ctx, size_Node, tab_phi_1);
+
     return Z3_mk_false(ctx);
 }
 
